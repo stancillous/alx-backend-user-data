@@ -20,6 +20,12 @@ def unauth():
     abort(401)
 
 
+@app_views.route("/test_403")
+def test_403():
+    """testing the 403 error"""
+    abort(403)
+
+
 @app_views.route('/stats/', strict_slashes=False)
 def stats() -> str:
     """ GET /api/v1/stats
