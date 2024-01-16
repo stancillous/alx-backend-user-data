@@ -18,9 +18,16 @@ class Auth:
         if path is not None and path[-1] != "/":
             path += "/"
 
+        # allow * at the end of excluded paths
+        # eg excluded_paths = ["/api/v1/stat*"]
+        for ex_path in excluded_paths:
+            if ex_path[-1] == "*":
+                if path.startswith(ex_path[:-1]):
+                    return True
+
         if excluded_paths is None or len(excluded_paths) == 0:
             return True
-        if (path not in excluded_paths or path is None):
+        if (path in excluded_paths or path is None):
             return True
         return False
 
