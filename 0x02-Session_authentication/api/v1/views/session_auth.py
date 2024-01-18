@@ -3,7 +3,7 @@
 new Flask view that handles all routes
 for the Session authentication"""
 from api.v1.views import app_views
-from flask import request, jsonify
+from flask import request, jsonify, abort
 from models.user import User
 import os
 
@@ -41,3 +41,12 @@ def auth_session():
     user_json.set_cookie(session_name, user_session_id)
 
     return user_json
+
+
+@app_views.route("/auth_session/logout", strict_slashes=False, methods=["DELETE"])
+def user_logout():
+    """logs user out"""
+    from api.v1.app import auth
+    if auth.destroy_session(request):
+        return jsonify({}), 200
+    abort(404)
