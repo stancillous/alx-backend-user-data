@@ -18,7 +18,7 @@ def auth_session():
         return jsonify({"error": "email missing"}), 400
     if not password:
         return jsonify({"error": "password missing"}), 400
-    
+
     user_instance = User()
     user_instance.email = email
     user_instance.password = password
@@ -26,11 +26,11 @@ def auth_session():
 
     # all_users = User.search({"email": email})
     if not User.search({"email": email}):
-        return jsonify({ "error": "no user found for this email" }), 404
+        return jsonify({"error": "no user found for this email"}), 404
 
     is_valid_password = User.is_valid_password(user_instance, password)
     if not is_valid_password:
-        return jsonify({ "error": "wrong password" }), 401
+        return jsonify({"error": "wrong password"}), 401
 
     from api.v1.app import auth
     user_session_id = auth.create_session(user_instance.id)
