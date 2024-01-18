@@ -43,7 +43,8 @@ def auth_session():
     return user_json
 
 
-@app_views.route("/auth_session/logout", strict_slashes=False, methods=["DELETE"])
+@app_views.route("/auth_session/logout",
+                 strict_slashes=False, methods=["DELETE"])
 def user_logout():
     """logs user out"""
     from api.v1.app import auth
