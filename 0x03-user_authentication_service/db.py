@@ -34,7 +34,7 @@ class DB:
             self.__session = DBSession()
         return self.__session
 
-    def add_user(self, email: str, hashed_password: str) -> TypeVar('User'):
+    def add_user(self, email: str, hashed_password: str) -> User:
         """method to add a user"""
         new_user = User(email=email, hashed_password=hashed_password)
         session = self._session
@@ -42,7 +42,7 @@ class DB:
         session.commit()
         return new_user
 
-    def find_user_by(self, **kwargs: any) -> TypeVar('User'):
+    def find_user_by(self, **kwargs) -> User:
         """get the first row found in users table"""
         if not kwargs:
             raise InvalidRequestError
@@ -50,10 +50,10 @@ class DB:
         session = self._session
         our_user = session.query(User).filter_by(**kwargs).first()
         if our_user is None:
-            raise NoResultFound("Not found")
+            raise NoResultFound
         return our_user
 
-    def update_user(self, user_id: int, **kwargs: any) -> None:
+    def update_user(self, user_id: int, **kwargs) -> None:
         """update user details in db"""
         session = self._session
         try:
