@@ -5,7 +5,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
-from sqlalchemy.exc import InvalidRequestError, NoResultFound
+from sqlalchemy.orm.exc import InvalidRequestError, NoResultFound
 
 from user import Base
 from user import User
@@ -53,7 +53,7 @@ class DB:
             raise NoResultFound("Not found")
         return our_user
 
-    def update_user(self, user_id: int, **kwargs: int) -> None:
+    def update_user(self, user_id: int, **kwargs: any) -> None:
         """update user details in db"""
         session = self._session
         try:
