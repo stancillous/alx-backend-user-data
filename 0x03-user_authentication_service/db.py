@@ -42,7 +42,7 @@ class DB:
         session.commit()
         return new_user
 
-    def find_user_by(self, **kwargs):
+    def find_user_by(self, **kwargs: any) -> TypeVar('User'):
         """get the first row found in users table"""
         if not kwargs:
             raise InvalidRequestError
@@ -53,7 +53,7 @@ class DB:
             raise NoResultFound("Not found")
         return our_user
 
-    def update_user(self, user_id, **kwargs):
+    def update_user(self, user_id: int, **kwargs: int) -> None:
         """update user details in db"""
         session = self._session
         try:
