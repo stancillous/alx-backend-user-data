@@ -3,8 +3,7 @@
 creating a model named User for a database table
 named users"""
 from sqlalchemy import Integer, Column, String
-from sqlalchemy.orm import declarative_base
-# from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
 
