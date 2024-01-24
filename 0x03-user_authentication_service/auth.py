@@ -8,9 +8,10 @@ from sqlalchemy.exc import NoResultFound
 
 
 def _hash_password(password: str) -> bytes:
-    """hash a passed in password"""
-    password_bytes = password.encode("utf-8")
-    return bcrypt.hashpw(password_bytes, bcrypt.gensalt())
+    """generate a hash of the input password using bcrypt"""
+    salt = bcrypt.gensalt()
+    hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
+    return hashed_password
 
 
 def _generate_uuid() -> str:
@@ -53,12 +54,3 @@ class Auth:
             return user.session_id
         except Exception:
             return None
-
-email = 'bob@bob.com'
-password = 'MyPwdOfBob'
-auth = Auth()
-
-auth.register_user(email, password)
-
-print(auth.create_session(email))
-print(auth.create_session("unknown@email.com"))
