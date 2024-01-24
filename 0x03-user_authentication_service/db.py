@@ -22,7 +22,7 @@ class DB:
     def __init__(self) -> None:
         """Initialize a new DB instance
         """
-        self._engine = create_engine("sqlite:///a.db", echo=False)
+        self._engine = create_engine("sqlite:///a.db", echo=True)
         Base.metadata.drop_all(self._engine)
         Base.metadata.create_all(self._engine)
         self.__session = None
@@ -38,16 +38,33 @@ class DB:
 
     def add_user(self, email: str, hashed_password: str) -> User:
         """method to add a user
-        Creates and adds a new user to the database.
-
-        Args:
-            email (str): The email of the new user.
-            hashed_password (str): The hashed password of the new user.
-
-        Returns:
-            User: The newly created user object.
         """
         new_user = User(email=email, hashed_password=hashed_password)
         self._session.add(new_user)
         self._session.commit()
         return new_user
+
+    def find_user_by(self, **kwargs) -> User:
+        """get the first row found in users table"""
+        if not kwargs:
+            raise InvalidRequestError
+
+        session = self._session
+        our_user = session.query(User).filter_by(**kwargs).first()
+        if our_user is None:
+            raise NoResultFound
+        return our_user
+
+    def update_user(self, user_id: int, **kwargs) -> None:
+        """update user details in db"""
+        session = self._session
+        try:
+            user = self.find_user_by(id=user_id)
+            for key, value in kwargs.items():
+                if key in user.__dict__:
+                    setattr(user, key, value)
+                else:
+                    raise ValueError
+            session.commit()
+        except Exception:
+            raise ValueError
