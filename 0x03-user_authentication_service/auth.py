@@ -10,8 +10,7 @@ from sqlalchemy.orm.exc import NoResultFound
 def _hash_password(password: str) -> bytes:
     """generate a hash of the input password using bcrypt"""
     salt = bcrypt.gensalt()
-    hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
-    return hashed_password
+    return bcrypt.hashpw(password.encode('utf-8'), salt)
 
 
 def _generate_uuid() -> str:
@@ -24,6 +23,7 @@ class Auth:
     """
 
     def __init__(self):
+        """constructor method"""
         self._db = DB()
 
     def register_user(self, email: str, password: str) -> TypeVar('User'):
