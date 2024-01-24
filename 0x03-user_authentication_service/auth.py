@@ -15,7 +15,7 @@ def _hash_password(password: str) -> bytes:
 
 def _generate_uuid() -> str:
     """generate a uuid"""
-    return str(uuid.uuid4)
+    return str(uuid.uuid4())
 
 
 class Auth:
@@ -43,3 +43,22 @@ class Auth:
                                   user.hashed_password.encode())
         except Exception:
             return False
+
+    def create_session(self, email: str) -> str:
+        """return session ID as a string"""
+        try:
+            user = self._db.find_user_by(email=email)
+            user.session_id = _generate_uuid()
+            self._db._session.commit()
+            return user.session_id
+        except Exception:
+            return None
+
+email = 'bob@bob.com'
+password = 'MyPwdOfBob'
+auth = Auth()
+
+auth.register_user(email, password)
+
+print(auth.create_session(email))
+print(auth.create_session("unknown@email.com"))
