@@ -2,6 +2,7 @@
 """module to handle all auth"""
 import bcrypt
 from db import DB
+from db import User
 import uuid
 from typing import TypeVar
 from sqlalchemy.orm.exc import NoResultFound
@@ -54,3 +55,16 @@ class Auth:
             return user.session_id
         except Exception:
             return None
+
+
+    def get_user_from_session_id(self, session_id: str) -> User | None:
+        """get user based on passed in session id"""
+        if session_id:
+            try:
+                user = self._db.find_user_by(session_id=session_id)
+                return user
+            except Exception:
+                return None
+        return None
+
+            
